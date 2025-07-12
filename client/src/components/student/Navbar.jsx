@@ -1,14 +1,15 @@
 import React from "react";
 import { assets } from "../../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { useAppStore } from "../../store";
 
 function NavBar() {
     const isCourseListPage = location.pathname.includes("/course-list");
-
+    const navigate=useNavigate()
     const { openSignIn } = useClerk();
     const { user } = useUser();
-
+    const {isEducator}=useAppStore()
     return (
         <div
             className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-r-gray-500 py-4 ${
@@ -19,13 +20,25 @@ function NavBar() {
                 src={assets.logo}
                 alt="Logo"
                 className="w-28 lg:w-32 cursor-pointer"
+                onClick={() => {
+                    navigate("/");
+                }}
             />
             <div className="hidden md:flex items-center gap-5 text-gray-500">
                 <div className="flex items-center gap-5">
                     {user && (
                         <>
-                            <button>Become Educator</button> |
-                            <Link to="/my-enrollments">My Enrollments</Link>
+                            <button
+                                onClick={() => {
+                                    navigate("/educator");
+                                }}
+                                className="cursor-pointer"
+                            >
+                                {isEducator
+                                    ? "Educator Dashboard"
+                                    : "Become Educator"}
+                            </button>{" "}
+                            |<Link to="/my-enrollments">My Enrollments</Link>
                         </>
                     )}
                 </div>
@@ -33,7 +46,7 @@ function NavBar() {
                     <UserButton />
                 ) : (
                     <button
-                        className="bg-blue-600 text-white px-5 py-2 rounded-full"
+                        className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-800 cursor-pointer"
                         onClick={() => {
                             openSignIn();
                         }}
@@ -46,8 +59,17 @@ function NavBar() {
                 <div className="flex items-center gap-2 sm:gap-2 max-sm:text-xs">
                     {user && (
                         <>
-                            <button>Become Educator</button> |
-                            <Link to="/my-enrollments">My Enrollments</Link>
+                            <button
+                                onClick={() => {
+                                    navigate("/educator");
+                                }}
+                                className="cursor-pointer"
+                            >
+                                {isEducator
+                                    ? "Educator Dashboard"
+                                    : "Become Educator"}
+                            </button>{" "}
+                            |<Link to="/my-enrollments">My Enrollments</Link>
                         </>
                     )}
                 </div>

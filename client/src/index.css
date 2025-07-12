@@ -4,3 +4,14 @@
 * {
     font-family: Outfit;
 }
+
+/* 
+@theme {
+    --font-text-home-heading-small: [ "26px", "36px"];
+    --font-text-home-heading-large: [ "36px", "44px"];
+    --font-home-heading-small: [ "28px", "34px"];
+    --font-home-heading-large: [ "48px", "56px"];
+    --font-default: [ "15px", "21px"];
+} */
+
+/* [repeat(auto-fit,minmax(200px,1fr))] */
