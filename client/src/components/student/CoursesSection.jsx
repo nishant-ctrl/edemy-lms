@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CourseCard from "./CourseCard";
-import { dummyCourses } from "../../assets/assets";
-import { useAppStore } from "../../store";
 import { useAppContext } from "../../context/AppContext";
 
 function CoursesSection() {
