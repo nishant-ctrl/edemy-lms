@@ -11,15 +11,15 @@ import SearchBar from "./SearchBar";
 import TestimonialsSection from "./TestimonialsSection";
 
 export {
-    CallToAction,
-    Companies,
-    CourseCard,
-    CoursesSection,
-    Footer,
-    Hero,
-    Loading,
-    Navbar,
-    Rating,
-    SearchBar,
-    TestimonialsSection,
+  CallToAction,
+  Companies,
+  CourseCard,
+  CoursesSection,
+  Footer,
+  Hero,
+  Loading,
+  Navbar,
+  Rating,
+  SearchBar,
+  TestimonialsSection,
 };
