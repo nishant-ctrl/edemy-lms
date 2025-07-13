@@ -50,7 +50,7 @@ function Footer() {
         </div>
       </div>
       <p className="py-4 text-center text-xs md:text-sm text-white/60">
-        Copyright 2025 © Nishant. All Rights Reserved
+        Copyright 2025 © Nishant. All Rights Reserved.
       </p>
     </footer>
   );

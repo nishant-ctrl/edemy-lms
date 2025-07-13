@@ -17,7 +17,7 @@ import {
 import { Loading, Navbar } from "./components/student";
 
 function App() {
-  const isEducatorRoute = useMatch("/educator/");
+  const isEducatorRoute = useMatch("/educator/*");
 
   return (
     <div className="text-default min-h-scren bg-white">
@@ -30,7 +30,7 @@ function App() {
         <Route path="/my-enrollments" element={<MyEnrollments />} />
         <Route path="/player/:courseId" element={<Player />} />
         <Route path="/loading/:path" element={<Loading />} />
-        <Route path="/educator" element={<Educator />}>
+        <Route path="/educator/" element={<Educator />}>
           <Route path="" element={<Dashboard />} />
           <Route path="add-course" element={<AddCouse />} />
           <Route path="my-courses" element={<MyCourses />} />
