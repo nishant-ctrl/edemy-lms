@@ -2,14 +2,15 @@ import React from "react";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
-import { useAppStore } from "../../store";
+
+import { useAppContext } from "../../context/AppContext";
 
 function NavBar() {
     const isCourseListPage = location.pathname.includes("/course-list");
     const navigate=useNavigate()
     const { openSignIn } = useClerk();
     const { user } = useUser();
-    const {isEducator}=useAppStore()
+    const {isEducator}=useAppContext()
     return (
         <div
             className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-r-gray-500 py-4 ${

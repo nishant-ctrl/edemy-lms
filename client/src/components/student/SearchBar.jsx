@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 function SearchBar({data}) {
     const navigate = useNavigate();
-    const [searchInput, setSearchInput] = useState(data?data:"");
+    const [searchInput, setSearchInput] = useState(data?data.input:"");
     const handleSearch = (e) => {
         e.preventDefault();
         navigate(`/course-list/${searchInput}`);
+        setSearchInput("")
     };
     return (
         <form className="max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-gray-500/20 rounded">

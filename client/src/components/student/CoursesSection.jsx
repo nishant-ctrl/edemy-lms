@@ -3,15 +3,12 @@ import { Link } from 'react-router-dom'
 import CourseCard from './CourseCard';
 import { dummyCourses } from '../../assets/assets';
 import { useAppStore } from '../../store';
+import { useAppContext } from '../../context/AppContext';
 
 function CoursesSection() {
-  const {allCourses,setAllCourses}=useAppStore()
-  useEffect(()=>{
-    const fetchAllCourses = async () => {
-        setAllCourses(dummyCourses);
-    };
-    fetchAllCourses()
-  },[])
+
+  const {allCourses}=useAppContext()
+
   return (
       <div className="py-16 md:px-40 px-8">
           <h2 className="text-3xl font-medium text-gray-800">
