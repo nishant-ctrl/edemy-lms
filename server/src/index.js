@@ -5,6 +5,7 @@ import connectDB from "./db/index.js"
 import { clerkWebhooks } from "./controllers/webhooks.js"
 import educatorRouter from "./routes/educator.route.js"
 import { clerkMiddleware } from "@clerk/express"
+import { errorHandler } from "./middlewares/error.middleware.js"
 
 dotenv.config({
     path:"./.env"
@@ -28,6 +29,7 @@ app.get("/",(req,res)=>{
 })
 app.post("/clerk",clerkWebhooks)
 app.use("/api/educator",educatorRouter)
+app.use(errorHandler);
 connectDB()
     .then(() => {
         app.on("error", (error) => {
