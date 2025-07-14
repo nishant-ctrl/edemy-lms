@@ -1,5 +1,5 @@
 import React, { act, useEffect, useRef, useState } from "react";
-import uniqid from "uniqid";
+import {nanoid} from "nanoid";
 import Quill from "quill";
 import { assets } from "../../assets/assets";
 
@@ -24,7 +24,7 @@ function AddCouse() {
       const title = prompt("Enter Chapter Name: ");
       if (title) {
         const newChapter = {
-          chapterId: uniqid(),
+          chapterId: nanoid(),
           chapterTitle: title,
           chapterContent: [],
           collapsed: false,
@@ -72,7 +72,7 @@ function AddCouse() {
               chapter.chapterContent.length > 0
                 ? chapter.chapterContent.slice(-1)[0].lectureOrder + 1
                 : 1,
-            lectureId: uniqid(),
+            lectureId: nanoid(),
           };
           chapter.chapterContent.push(newLecture);
           return chapter;

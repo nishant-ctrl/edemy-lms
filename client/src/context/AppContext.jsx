@@ -1,8 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { dummyCourses } from "../assets/assets";
 import humanizeDuration from "humanize-duration";
-export const AppContext = createContext({});
+import {useAuth,useUser} from "@clerk/clerk-react"
 
+
+export const AppContext = createContext({});
 export const useAppContext = () => {
   return useContext(AppContext);
 };
@@ -12,6 +14,13 @@ export const AppContextProvider = ({ children }) => {
   const [allCourses, setAllCourses] = useState([]);
   const [isEducator, setIsEducator] = useState(true);
   const [enrolledCourses, setenrolledCourses] = useState([]);
+
+
+  const { getToken } = useAuth();
+  const { user } = useUser();
+
+
+
   const fetchUserEnrolledCourses = async () => {
     setenrolledCourses(dummyCourses);
   };
@@ -55,6 +64,14 @@ export const AppContextProvider = ({ children }) => {
     fetchAllCourses();
     fetchUserEnrolledCourses();
   }, []);
+  const logToken=async () => {
+    console.log(await getToken())
+  }
+  useEffect(()=>{
+    if(user){
+      logToken();
+    }
+  },[user])
   const value = {
     currency,
     allCourses,

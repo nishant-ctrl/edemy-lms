@@ -3,6 +3,9 @@ import cors from "cors"
 import dotenv from "dotenv"
 import connectDB from "./db/index.js"
 import { clerkWebhooks } from "./controllers/webhooks.js"
+import educatorRouter from "./routes/educator.route.js"
+import { clerkMiddleware } from "@clerk/express"
+
 dotenv.config({
     path:"./.env"
 })
@@ -15,6 +18,7 @@ app.use(
         credentials: true,
     })
 );
+app.use(clerkMiddleware())
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
@@ -23,6 +27,7 @@ app.get("/",(req,res)=>{
     res.send("Working");
 })
 app.post("/clerk",clerkWebhooks)
+app.use("/api/educator",educatorRouter)
 connectDB()
     .then(() => {
         app.on("error", (error) => {
