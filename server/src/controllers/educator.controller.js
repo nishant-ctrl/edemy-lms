@@ -2,7 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { clerkClient } from "@clerk/express";
-import { Course } from "../models/course.medel.js";
+import { Course } from "../models/course.model.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Purchase } from "../models/purchase.model.js";
