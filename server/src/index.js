@@ -22,7 +22,7 @@ app.use(
     })
 );
 app.use(clerkMiddleware());
-app.use(express.json({ limit: "16kb" }));
+// app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 
@@ -31,10 +31,10 @@ app.get("/", (req, res) => {
 });
 app.post("/clerk", clerkWebhooks);
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
-app.use("/api/educator", educatorRouter);
-app.use("/api/course", courseRouter);
-app.use("/api/user", userRouter);
-app.use(errorHandler);
+app.use("/api/educator", express.json(), educatorRouter);
+app.use("/api/course", express.json(), courseRouter);
+app.use("/api/user", express.json(), userRouter);
+app.use(express.json(), errorHandler);
 connectDB()
     .then(() => {
         app.on("error", (error) => {
