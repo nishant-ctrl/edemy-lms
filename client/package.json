@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.33.0",
     "@tailwindcss/vite": "^4.1.11",
+    "axios": "^1.10.0",
     "dotenv": "^17.2.0",
     "humanize-duration": "^3.33.0",
     "nanoid": "^5.1.5",
@@ -20,6 +21,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
+    "react-toastify": "^11.0.5",
     "react-youtube": "^10.1.0",
     "tailwindcss": "^4.1.11",
     "truncate-html": "^1.2.2",

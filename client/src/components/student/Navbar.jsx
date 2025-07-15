@@ -4,13 +4,41 @@ import { Link, useNavigate } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 
 import { useAppContext } from "../../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function NavBar() {
+  const { isEducator,setIsEducator,backendUrl,getToken } = useAppContext();
+
+
+
+
   const isCourseListPage = location.pathname.includes("/course-list");
   const navigate = useNavigate();
   const { openSignIn } = useClerk();
   const { user } = useUser();
-  const { isEducator } = useAppContext();
+
+  const becomeEducator= async ()=>{
+    try {
+      if(isEducator){
+        navigate("/educator")
+        return;
+      }
+      const token=await getToken();
+      const res=await axios.get(backendUrl+"/api/educator/update-role", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if(res.data.statusCode===200){
+        setIsEducator(true)
+        toast.success(res.data.message)
+      }
+    } catch (error) {
+      toast.error(error.data.message)
+    }
+  }
+
+
+
   return (
     <div
       className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-r-gray-500 py-4 ${
@@ -30,9 +58,7 @@ function NavBar() {
           {user && (
             <>
               <button
-                onClick={() => {
-                  navigate("/educator");
-                }}
+                onClick={becomeEducator}
                 className="cursor-pointer"
               >
                 {isEducator ? "Educator Dashboard" : "Become Educator"}
@@ -59,9 +85,7 @@ function NavBar() {
           {user && (
             <>
               <button
-                onClick={() => {
-                  navigate("/educator");
-                }}
+                onClick={becomeEducator}
                 className="cursor-pointer"
               >
                 {isEducator ? "Educator Dashboard" : "Become Educator"}

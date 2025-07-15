@@ -117,7 +117,7 @@ export const getUserCourseProgress = asyncHandler(async (req, res) => {
 export const addUserRating = asyncHandler(async (req, res) => {
     const { userId } = req.auth();
     const { courseId, rating } = req.body;
-    if (!userId || !courseId || rating || rating < 1 || rating > 5) {
+    if (!userId || !courseId || !rating || rating < 1 || rating > 5) {
         throw new ApiError(
             400,
             "UserId , CourseId and valid rating are required"
