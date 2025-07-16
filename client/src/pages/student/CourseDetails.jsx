@@ -27,6 +27,12 @@ function CourseDetails() {
     getToken,
   } = useAppContext();
   const [openSection, setOpenSection] = useState({});
+  const extractYouTubeVideoId = (url) => {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([a-zA-Z0-9_-]{11})/
+    );
+    return match ? match[1] : null;
+  };
 
   const fetchCourseData = async () => {
     try {
@@ -50,7 +56,7 @@ function CourseDetails() {
       if (isAlreadyEnrolled) {
         toast.warn("Already Enrolled");
       }
-      setLoading(true)
+      setLoading(true);
       const token = await getToken();
       const res = await axios.post(
         backendUrl + "/api/user/purchase",
@@ -59,9 +65,9 @@ function CourseDetails() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      if(res.data.statusCode===200){
-        const { session_url }=res.data.data;
-        window.location.replace(session_url)
+      if (res.data.statusCode === 200) {
+        const { session_url } = res.data.data;
+        window.location.replace(session_url);
       }
     } catch (error) {
       toast.error(error.data.message);
@@ -183,9 +189,9 @@ function CourseDetails() {
                                   className="text-blue-500 cursor-pointer"
                                   onClick={() =>
                                     setPlayerData({
-                                      videoId: lecture.lectureUrl
-                                        .split("/")
-                                        .pop(),
+                                      videoId: extractYouTubeVideoId(
+                                        lecture.lectureUrl
+                                      ),
                                     })
                                   }
                                 >

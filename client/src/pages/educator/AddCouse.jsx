@@ -1,9 +1,13 @@
 import React, { act, useEffect, useRef, useState } from "react";
-import {nanoid} from "nanoid";
+import { nanoid } from "nanoid";
 import Quill from "quill";
 import { assets } from "../../assets/assets";
-
+import { useAppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Loading from "../../components/student/Loading";
 function AddCouse() {
+  const [loading, setLoading] = useState(false);
   const quillRef = useRef(null);
   const editorRef = useRef(null);
   const [courseTitle, setCourseTitle] = useState("");
@@ -19,6 +23,7 @@ function AddCouse() {
     lectureUrl: "",
     isPreviewFree: false,
   });
+  const { backendUrl, getToken } = useAppContext();
   const handleChapter = (action, chapterId) => {
     if (action === "add") {
       const title = prompt("Enter Chapter Name: ");
@@ -74,7 +79,12 @@ function AddCouse() {
                 : 1,
             lectureId: nanoid(),
           };
-          chapter.chapterContent.push(newLecture);
+          // chapter.chapterContent.push(newLecture);
+          return {
+            ...chapter,
+            chapterContent: [...chapter.chapterContent, newLecture],
+          };
+        } else {
           return chapter;
         }
       })
@@ -87,9 +97,45 @@ function AddCouse() {
       isPreviewFree: false,
     });
   };
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      if (!image) {
+        toast.error("Thumbnail not selected");
+      }
+      setLoading(true);
+      const courseData = {
+        courseTitle,
+        courseDescription: quillRef.current.root.innerHTML,
+        coursePrice: Number(coursePrice),
+        discount: Number(discount),
+        courseContent: chapters,
+      };
+      const formData = new FormData();
+      formData.append("courseData", JSON.stringify(courseData));
+      formData.append("image", image);
+      const token = await getToken();
+      const res = await axios.post(
+        backendUrl + "/api/educator/add-course",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (res.data.statusCode === 201) {
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.data.message);
+    } finally {
+      setLoading(false);
+      setCourseTitle("");
+      setCoursePrice(0);
+      setDiscount(0);
+      setImage(null);
+      setChapters([]);
+      quillRef.current.root.innerHTML = "";
+    }
   };
   useEffect(() => {
     if (!quillRef.current && editorRef.current) {
@@ -98,6 +144,9 @@ function AddCouse() {
       });
     }
   }, []);
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div className="h-screen overflow-scroll flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0">
       <form
@@ -112,7 +161,7 @@ function AddCouse() {
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500"
             required
             onChange={(e) => {
-              setCourseTitle(e.target, value);
+              setCourseTitle(e.target.value);
             }}
             value={courseTitle}
           />
@@ -151,7 +200,7 @@ function AddCouse() {
                 hidden
               />
               <img
-                src={image ? URL.createObjectURL(image) : ""}
+                src={image ? URL.createObjectURL(image) : null}
                 alt=""
                 className="max-h-10"
               />

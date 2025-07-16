@@ -98,7 +98,7 @@ export const getEnrolledStudentsData = asyncHandler(async (req, res) => {
         courseId: { $in: courseIds },
         status: "completed",
     })
-        .populate("userId", "name", "imageUrl")
+        .populate("userId", "name imageUrl")
         .populate("courseId", "courseTitle");
     const enrolledStudents = purchases.map((purchase) => ({
         student: purchase.userId,
@@ -107,5 +107,7 @@ export const getEnrolledStudentsData = asyncHandler(async (req, res) => {
     }));
     return res
         .status(200)
-        .json(200, enrolledStudents, "Fetched enrolled students");
+        .json(
+            new ApiResponse(200, enrolledStudents, "Fetched enrolled students")
+        );
 });

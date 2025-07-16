@@ -27,9 +27,8 @@ function MyEnrollments() {
             { courseId: course._id },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          const data=res.data.data;
+          const data = res.data.data;
           let totalLectures = calculateNoOfLectures(course);
-          console.log(data)
           const lectureCompleted = data.lectureCompleted
             ? data.lectureCompleted.length
             : 0;
@@ -41,17 +40,16 @@ function MyEnrollments() {
       toast.error(error.data.message);
     }
   };
-  useEffect(()=>{console.log(progressArray)},[progressArray])
-  useEffect(()=>{
-    if(userData){
-      fetchUserEnrolledCourses()
+  useEffect(() => {
+    if (userData) {
+      fetchUserEnrolledCourses();
     }
-  },[userData])
-  useEffect(()=>{
-    if(enrolledCourses.length>0){
-      getCourseProgress()
+  }, [userData]);
+  useEffect(() => {
+    if (enrolledCourses.length > 0) {
+      getCourseProgress();
     }
-  },[enrolledCourses])
+  }, [enrolledCourses]);
   return (
     <>
       <div className="px-8 md:px-36 pt-10">
@@ -96,8 +94,9 @@ function MyEnrollments() {
                     {calculateCourseDuration(course)}
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">
-                    {progressArray[i] &&
-                      `${progressArray[i].lectureCompleted} / ${progressArray[i].totalLectures}`}{" "}
+                    {progressArray[i]
+                      ? `${progressArray[i].lectureCompleted} / ${progressArray[i].totalLectures}`
+                      : `0`}{" "}
                     <span>Lectures</span>
                   </td>
                   <td className="px-4 py-3 max-sm:text-right">

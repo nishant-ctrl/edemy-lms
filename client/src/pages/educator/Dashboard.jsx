@@ -2,15 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { assets, dummyDashboardData } from "../../assets/assets";
 import Loading from "../../components/student/Loading";
+import axios from "axios";
+import { toast } from "react-toastify";
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
-  const { currency } = useAppContext();
+  const { currency, backendUrl, getToken, isEducator } = useAppContext();
   const fetchDashboardData = async () => {
-    setDashboardData(dummyDashboardData);
+    try {
+      const token = await getToken();
+      const res = await axios.get(backendUrl + "/api/educator/dashboard", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.statusCode === 200) {
+        setDashboardData(res.data.data.dashboardData);
+      }
+    } catch (error) {
+      toast.error(error.data.message);
+    }
   };
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    if (isEducator) {
+      fetchDashboardData();
+    }
+  }, [isEducator]);
   if (!dashboardData) return <Loading />;
   return (
     <div className="min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0">
@@ -39,7 +53,7 @@ function Dashboard() {
             <div>
               <p className="text-2xl font-medium text-gray-600">
                 {currency}
-                {dashboardData.totalEarnings}
+                {dashboardData.totalEarnings.toFixed(2)}
               </p>
               <p className="text-base text-gray-500">Total Earnings</p>
             </div>
@@ -59,18 +73,22 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-500">
-                {
-                  dashboardData.enrolledStudentsData.map((item,index)=>(
-                    <tr key={index} className="border-b border-gray-500/20">
-                      <td className="px-4 py-3 text-center hidden sm:table-cell">{index+1}</td>
-                      <td className="md:px-4 px-2 py-3 flex items-center space-x-3">
-                        <img src={item.student.imageUrl} alt="profile" className="w-9 h-9 rounded-full"/>
-                        <span className="truncate">{item.student.name}</span>
-                      </td>
-                      <td className="px-4 py-3 truncate">{item.courseTitle}</td>
-                    </tr>
-                  ))
-                }
+                {dashboardData.enrolledStudentsData.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-500/20">
+                    <td className="px-4 py-3 text-center hidden sm:table-cell">
+                      {index + 1}
+                    </td>
+                    <td className="md:px-4 px-2 py-3 flex items-center space-x-3">
+                      <img
+                        src={item.student.imageUrl}
+                        alt="profile"
+                        className="w-9 h-9 rounded-full"
+                      />
+                      <span className="truncate">{item.student.name}</span>
+                    </td>
+                    <td className="px-4 py-3 truncate">{item.courseTitle}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

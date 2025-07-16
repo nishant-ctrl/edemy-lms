@@ -26,6 +26,12 @@ function Player() {
 
   const [progressData, setProgressData] = useState(null);
   const [initialRating, setInitialRating] = useState(0);
+  const extractYouTubeVideoId = (url) => {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([a-zA-Z0-9_-]{11})/
+    );
+    return match ? match[1] : null;
+  };
 
   const getCourseData = () => {
     setLoading(true);
@@ -216,7 +222,7 @@ function Player() {
             <div>
               <YouTube
                 key={playerData.lectureUrl}
-                videoId={playerData.lectureUrl.split("/").pop()}
+                videoId={extractYouTubeVideoId(playerData.lectureUrl)}
                 iframeClassName="w-full aspect-video"
               />
               <div className="flex justify-between items-center mt-1">
