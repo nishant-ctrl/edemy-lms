@@ -21,7 +21,7 @@ app.use(
         credentials: true,
     })
 );
-app.post("/clerk", clerkWebhooks);
+app.post("/clerk", bodyParser.raw({ type: "*/*" }), clerkWebhooks);
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 app.use(clerkMiddleware());
 app.use(express.json());
