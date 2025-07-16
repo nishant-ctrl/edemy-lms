@@ -8,7 +8,7 @@ import courseRouter from "./routes/course.route.js";
 import userRouter from "./routes/user.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import { errorHandler } from "./middlewares/error.middleware.js";
-
+import bodyParser from "body-parser";
 dotenv.config({
     path: "./.env",
 });
@@ -29,7 +29,7 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
     res.send("Working");
 });
-app.post("/clerk", clerkWebhooks);
+app.post("/clerk", bodyParser.raw({ type: "*/*" }), clerkWebhooks);
 app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 app.use("/api/educator", express.json(), educatorRouter);
 app.use("/api/course", express.json(), courseRouter);
