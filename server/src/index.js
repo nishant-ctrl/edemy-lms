@@ -21,16 +21,16 @@ app.use(
         credentials: true,
     })
 );
+app.post("/clerk", bodyParser.raw({ type: "*/*" }), clerkWebhooks);
+app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 app.use(clerkMiddleware());
-// app.use(express.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
     res.send("Working");
 });
-app.post("/clerk", bodyParser.raw({ type: "*/*" }), clerkWebhooks);
-app.post("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
 app.use("/api/educator", express.json(), educatorRouter);
 app.use("/api/course", express.json(), courseRouter);
 app.use("/api/user", express.json(), userRouter);
